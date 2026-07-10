@@ -20,6 +20,15 @@ npm run build      # production build to dist/
 
 Deployed to GitHub Pages from `main` by CI.
 
+## Install on a phone
+
+Open https://pinireisman.github.io/uri_heads_up/ once while online, then:
+
+- **Android Chrome:** tap the **Install app** button on the home screen (or menu → "Add to Home screen").
+- **iPhone Safari:** Share → "Add to Home Screen".
+
+After the first load the app works fully offline, including gameplay and imports.
+
 **Device support note:** motion gestures are validated on Android Chrome. The iOS motion
 permission flow is implemented per spec but untested on real hardware; iPhones can always
 play with touch controls.

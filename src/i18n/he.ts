@@ -7,6 +7,9 @@ export const he = {
   diagLink: "אבחון חיישנים",
 
   // home
+  installApp: "התקנת האפליקציה",
+  iosInstallHint:
+    "באייפון: פותחים בספארי, לוחצים על שיתוף ואז \u201cהוספה למסך הבית\u201d.",
   newCategory: "קטגוריה חדשה",
   importExport: "ייבוא / ייצוא",
   settings: "הגדרות",

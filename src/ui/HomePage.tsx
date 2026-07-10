@@ -1,11 +1,13 @@
 import { useLocale, useT } from "../i18n";
 import { enabledWords } from "../domain/types";
+import { useInstallPrompt } from "../pwa/install";
 import { useCategories } from "./data";
 
 export default function HomePage() {
   const t = useT();
   const { locale, setLocale } = useLocale();
   const { categories } = useCategories();
+  const { canInstall, showIosHint, install } = useInstallPrompt();
 
   return (
     <main className="page">
@@ -62,7 +64,13 @@ export default function HomePage() {
         <a className="btn" href="#/settings">
           {t("settings")}
         </a>
+        {canInstall && (
+          <button className="btn" onClick={install}>
+            {t("installApp")}
+          </button>
+        )}
       </nav>
+      {showIosHint && <p className="footnote">{t("iosInstallHint")}</p>}
     </main>
   );
 }

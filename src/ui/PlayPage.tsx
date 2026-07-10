@@ -6,6 +6,7 @@ import { addRound } from "../persistence/repositories";
 import { dbReady } from "../startup";
 import { categoryRepo, setLastRound, useSettings } from "./data";
 import { playFeedback } from "./sounds";
+import { useWakeLock } from "../pwa/wakeLock";
 import {
   MotionController,
   type MotionState,
@@ -40,6 +41,10 @@ export default function PlayPage({ id }: { id: string }) {
   const controller = useRef<MotionController | null>(null);
   const endedRef = useRef(false);
   const actionRef = useRef<(a: GestureAction) => void>(() => {});
+
+  useWakeLock(
+    settings.keepAwake && (stage === "live" || stage === "calibrating"),
+  );
 
   useEffect(() => {
     void categoryRepo().then(async (repo) => {

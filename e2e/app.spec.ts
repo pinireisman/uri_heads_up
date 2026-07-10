@@ -139,3 +139,25 @@ test("Hebrew UI switches direction (RTL)", async ({ page }) => {
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl"); // persisted
 });
+
+test("works offline after the first successful load (E2E-9)", async ({
+  page,
+  context,
+}) => {
+  await page.goto("");
+  await expect(page.getByRole("link", { name: /Animals/ })).toBeVisible();
+  // service worker active ⇒ precache complete
+  await page.evaluate(() => navigator.serviceWorker.ready);
+
+  await context.setOffline(true);
+  await page.reload();
+  await expect(page.getByRole("link", { name: /Animals/ })).toBeVisible();
+
+  // full round offline, via touch
+  await page.getByRole("link", { name: /Animals/ }).click();
+  await page.getByRole("link", { name: "Start round" }).click();
+  await expect(page.locator(".play-word")).toBeVisible({ timeout: 10_000 });
+  await page.getByRole("button", { name: "Correct" }).click();
+  await page.getByRole("button", { name: "End round" }).click();
+  await expect(page).toHaveURL(/#\/results/);
+});

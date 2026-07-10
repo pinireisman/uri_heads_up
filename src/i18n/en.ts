@@ -5,6 +5,9 @@ export const en = {
   diagLink: "Sensor diagnostics",
 
   // home
+  installApp: "Install app",
+  iosInstallHint:
+    "On iPhone: open in Safari, tap Share, then \u201cAdd to Home Screen\u201d.",
   newCategory: "New category",
   importExport: "Import / Export",
   settings: "Settings",
