@@ -45,7 +45,20 @@ export function useLocale(): LocaleState {
   return state;
 }
 
-export function useT(): (key: MessageKey) => string {
+export type Translate = (
+  key: MessageKey,
+  vars?: Record<string, string | number>,
+) => string;
+
+export function useT(): Translate {
   const { locale } = useLocale();
-  return (key) => dicts[locale][key];
+  return (key, vars) => {
+    let text = dicts[locale][key];
+    if (vars) {
+      for (const [name, value] of Object.entries(vars)) {
+        text = text.replaceAll(`{${name}}`, String(value));
+      }
+    }
+    return text;
+  };
 }

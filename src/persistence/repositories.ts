@@ -120,14 +120,27 @@ export async function setSetting(
 
 export const HISTORY_LIMIT = 20;
 
-export async function addRound(db: UhuDb, result: RoundResult): Promise<void> {
+export async function addRound(
+  db: UhuDb,
+  result: RoundResult,
+): Promise<number> {
   const tx = db.transaction("rounds", "readwrite");
-  void tx.store.add(result);
+  const added = tx.store.add(result);
   const keys = await tx.store.getAllKeys(); // runs after the add: includes it
   for (const key of keys.slice(0, Math.max(0, keys.length - HISTORY_LIMIT))) {
     void tx.store.delete(key);
   }
   await tx.done;
+  return added;
+}
+
+/** Review-mode correction on the summary screen updates the stored round. */
+export async function updateRound(
+  db: UhuDb,
+  key: number,
+  result: RoundResult,
+): Promise<void> {
+  await db.put("rounds", result, key);
 }
 
 export async function getRounds(db: UhuDb): Promise<RoundResult[]> {
