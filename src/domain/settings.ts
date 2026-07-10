@@ -13,6 +13,7 @@ export interface Settings {
   keepAwake: boolean;
   confirmEndRound: boolean;
   showPresentedCount: boolean;
+  showRoundTimer: boolean;
 }
 
 export const defaultSettings: Settings = {
@@ -26,4 +27,5 @@ export const defaultSettings: Settings = {
   keepAwake: true,
   confirmEndRound: true,
   showPresentedCount: true,
+  showRoundTimer: false,
 };

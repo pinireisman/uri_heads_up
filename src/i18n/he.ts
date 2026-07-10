@@ -63,6 +63,7 @@ export const he = {
   rotatePrompt: "סובבו את הטלפון לרוחב",
 
   // results
+  resultsTime: "זמן: {t}",
   resultsTitle: "סיכום הסיבוב",
   correctList: "נוחשו",
   skippedList: "דולגו",
@@ -102,6 +103,7 @@ export const he = {
   errInvalid: "הקובץ אינו ייצוא קטגוריות תקין: {detail}",
 
   // settings
+  setShowTimer: "טיימר סיבוב (מונה עולה, ללא הגבלה)",
   setTheme: "מראה",
   themeSystem: "לפי המערכת",
   themeLight: "בהיר",

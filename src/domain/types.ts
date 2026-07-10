@@ -27,6 +27,8 @@ export interface RoundResult {
   categoryName: string;
   startedAt: string;
   endedAt: string;
+  /** first word shown → round end; absent on rounds saved before the timer existed */
+  durationMs?: number;
   outcomes: RoundOutcome[];
 }
 

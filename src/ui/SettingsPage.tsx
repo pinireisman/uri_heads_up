@@ -14,6 +14,7 @@ const toggles: [keyof Settings & string, MessageKey][] = [
   ["keepAwake", "setKeepAwake"],
   ["confirmEndRound", "setConfirmEnd"],
   ["showPresentedCount", "setShowCount"],
+  ["showRoundTimer", "setShowTimer"],
 ];
 
 export default function SettingsPage() {

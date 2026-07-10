@@ -5,7 +5,7 @@ import { enabledWords } from "../domain/types";
 import { addRound } from "../persistence/repositories";
 import { dbReady } from "../startup";
 import { categoryRepo, setLastRound, useSettings } from "./data";
-import { playFeedback } from "./sounds";
+import { playFanfare, playFeedback } from "./sounds";
 import { useWakeLock } from "../pwa/wakeLock";
 import {
   MotionController,
@@ -40,6 +40,7 @@ export default function PlayPage({ id }: { id: string }) {
   const [notice, setNotice] = useState(false);
   const controller = useRef<MotionController | null>(null);
   const endedRef = useRef(false);
+  const liveSinceRef = useRef<number | null>(null);
   const actionRef = useRef<(a: GestureAction) => void>(() => {});
 
   useWakeLock(
@@ -125,11 +126,19 @@ export default function PlayPage({ id }: { id: string }) {
     return () => clearTimeout(timer);
   }, [stage, count]);
 
+  // the timer starts when the first word appears (stage → live)
+  useEffect(() => {
+    if (stage === "live") liveSinceRef.current ??= performance.now();
+  }, [stage]);
+
   const finish = useCallback(async (r: Round) => {
     if (endedRef.current) return;
     endedRef.current = true;
     controller.current?.stop();
     const result = r.end();
+    if (liveSinceRef.current !== null) {
+      result.durationMs = Math.round(performance.now() - liveSinceRef.current);
+    }
     const key = await addRound(await dbReady, result);
     setLastRound(result, key);
     window.location.hash = "#/results";
@@ -147,6 +156,7 @@ export default function PlayPage({ id }: { id: string }) {
         setFeedback(null);
         if (round.isComplete) {
           setPhase("complete");
+          if (settings.soundEnabled) playFanfare();
           setTimeout(() => void finish(round), 900);
         } else {
           setPhase("play");

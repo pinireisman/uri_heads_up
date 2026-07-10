@@ -16,13 +16,17 @@ function tone(at: number, freq: number, dur: number): void {
   osc.stop(at + dur + 0.02);
 }
 
+function ensureContext(): AudioContext {
+  // lazily created after a user gesture (starting a round involves taps),
+  // so autoplay policies allow it
+  ctx ??= new AudioContext();
+  if (ctx.state === "suspended") void ctx.resume();
+  return ctx;
+}
+
 export function playFeedback(kind: "correct" | "skipped"): void {
   try {
-    // lazily created after a user gesture (starting a round involves taps),
-    // so autoplay policies allow it
-    ctx ??= new AudioContext();
-    if (ctx.state === "suspended") void ctx.resume();
-    const t = ctx.currentTime;
+    const t = ensureContext().currentTime;
     if (kind === "correct") {
       tone(t, 660, 0.12); // rising major third: "yes!"
       tone(t + 0.1, 880, 0.18);
@@ -32,5 +36,17 @@ export function playFeedback(kind: "correct" | "skipped"): void {
     }
   } catch {
     // no audio available — gameplay continues silently
+  }
+}
+
+/** Deck complete: a short ascending fanfare with a closing chord. */
+export function playFanfare(): void {
+  try {
+    const t = ensureContext().currentTime;
+    const notes = [523.25, 659.25, 783.99, 1046.5]; // C5 E5 G5 C6
+    notes.forEach((f, i) => tone(t + i * 0.12, f, 0.22));
+    [523.25, 659.25, 783.99].forEach((f) => tone(t + 0.55, f, 0.55));
+  } catch {
+    // no audio available
   }
 }

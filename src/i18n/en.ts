@@ -61,6 +61,7 @@ export const en = {
   rotatePrompt: "Rotate your phone sideways",
 
   // results
+  resultsTime: "Time: {t}",
   resultsTitle: "Round summary",
   correctList: "Guessed",
   skippedList: "Skipped",
@@ -101,6 +102,7 @@ export const en = {
   errInvalid: "The file is not a valid category export: {detail}",
 
   // settings
+  setShowTimer: "Round timer (count-up, no limit)",
   setTheme: "Appearance",
   themeSystem: "System",
   themeLight: "Light",

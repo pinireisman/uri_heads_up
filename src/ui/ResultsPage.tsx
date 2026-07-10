@@ -4,10 +4,16 @@ import { correctOutcome, summarize } from "../domain/round";
 import type { RoundOutcome, WordResult } from "../domain/types";
 import { updateRound } from "../persistence/repositories";
 import { dbReady } from "../startup";
-import { getLastRound, setLastRound } from "./data";
+import { getLastRound, setLastRound, useSettings } from "./data";
+
+const formatDuration = (ms: number) => {
+  const total = Math.round(ms / 1000);
+  return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, "0")}`;
+};
 
 export default function ResultsPage() {
   const t = useT();
+  const { settings } = useSettings();
   const last = getLastRound();
   const [result, setResult] = useState(last?.result);
 
@@ -51,6 +57,9 @@ export default function ResultsPage() {
       <h1>{t("resultsTitle")}</h1>
       <p>
         {result.categoryName} — {t("presentedTotal", { n: counts.presented })}
+        {settings.showRoundTimer && result.durationMs != null && (
+          <> — {t("resultsTime", { t: formatDuration(result.durationMs) })}</>
+        )}
       </p>
       <div className="score-row">
         <div className="score score-correct">

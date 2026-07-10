@@ -205,3 +205,14 @@ test("fullscreen button toggles fullscreen", async ({ page }) => {
     .poll(() => page.evaluate(() => !!document.fullscreenElement))
     .toBe(false);
 });
+
+test("round timer option shows elapsed time on results", async ({ page }) => {
+  await page.goto("#/settings");
+  await page.getByLabel("Round timer", { exact: false }).check();
+
+  await createCategory(page, "Timed", ["Solo"]);
+  await startRound(page);
+  await page.getByRole("button", { name: "Correct" }).click();
+  await expect(page).toHaveURL(/#\/results/, { timeout: 10_000 });
+  await expect(page.getByText(/Time: \d+:\d\d/)).toBeVisible();
+});
