@@ -175,3 +175,60 @@ describe("exportCategories", () => {
     expect(filtered.categories[0].words).toHaveLength(1);
   });
 });
+
+describe("malformed-import battery (release validation)", () => {
+  const file = (categories: unknown, version: unknown = 1) =>
+    JSON.stringify({ schemaVersion: version, categories });
+
+  test("rejects more than the category limit", () => {
+    const cats = Array.from({ length: LIMITS.categories + 1 }, (_, i) => ({
+      name: `C${i}`,
+      words: [],
+    }));
+    expect(parseImport(file(cats), [])).toMatchObject({
+      ok: false,
+      code: "invalid",
+    });
+  });
+
+  test("rejects more than the per-category word limit", () => {
+    const words = Array.from(
+      { length: LIMITS.wordsPerCategory + 1 },
+      (_, i) => `w${i}`,
+    );
+    expect(parseImport(file([{ name: "X", words }]), [])).toMatchObject({
+      ok: false,
+      code: "invalid",
+    });
+  });
+
+  test("string schemaVersion is invalid, not future-version", () => {
+    expect(parseImport(file([], "99"), [])).toMatchObject({
+      ok: false,
+      code: "invalid",
+    });
+  });
+
+  test("null and object words are rejected", () => {
+    expect(parseImport(file([{ name: "X", words: [null] }]), [])).toMatchObject(
+      {
+        ok: false,
+        code: "invalid",
+      },
+    );
+    expect(
+      parseImport(file([{ name: "X", words: [{ text: 5 }] }]), []),
+    ).toMatchObject({ ok: false, code: "invalid" });
+  });
+
+  test("top-level array and scalar are rejected", () => {
+    expect(parseImport("[]", [])).toMatchObject({
+      ok: false,
+      code: "missing-version",
+    });
+    expect(parseImport("42", [])).toMatchObject({
+      ok: false,
+      code: "missing-version",
+    });
+  });
+});
