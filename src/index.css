@@ -1,0 +1,36 @@
+:root {
+  font-family: system-ui, sans-serif;
+  color-scheme: light dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  /* safe areas for notches / home indicators */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+.shell {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+button {
+  font: inherit;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid currentColor;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  /* large touch target */
+  min-height: 44px;
+  min-width: 44px;
+}
