@@ -13,9 +13,8 @@ export default function HomePage() {
 
   return (
     <main className="page">
-      <header className="home-header">
-        <h1>{t("appName")}</h1>
-        <span>
+      <header className="stage">
+        <div className="stage-top">
           {fullscreen.supported && (
             <button
               className="btn-plain"
@@ -36,9 +35,23 @@ export default function HomePage() {
           >
             {t("switchLanguage")}
           </button>
-        </span>
+        </div>
+        <div className="stage-hero">
+          <img
+            className="hero-img"
+            src={`${import.meta.env.BASE_URL}pwa-512.png`}
+            alt=""
+          />
+          <div>
+            <h1>{t("appName")}</h1>
+            <p className="stage-tagline">{t("tagline")}</p>
+          </div>
+        </div>
+        <div className="howto-pills">
+          <span className="pill pill-correct">⬇ {t("correct")}</span>
+          <span className="pill pill-skip">⬆ {t("skip")}</span>
+        </div>
       </header>
-      <p>{t("howToPlay")}</p>
 
       {categories && categories.length === 0 && <p>{t("noCategories")}</p>}
       <ul className="card-list">
@@ -50,7 +63,9 @@ export default function HomePage() {
                 className="card"
                 href={`#/category/${encodeURIComponent(c.id)}`}
                 style={
-                  c.color ? { borderInlineStartColor: c.color } : undefined
+                  c.color
+                    ? ({ "--cat": c.color } as React.CSSProperties)
+                    : undefined
                 }
               >
                 <span className="card-icon" aria-hidden="true">
@@ -73,7 +88,7 @@ export default function HomePage() {
       </ul>
 
       <nav className="home-actions">
-        <a className="btn" href="#/new">
+        <a className="btn btn-primary" href="#/new">
           + {t("newCategory")}
         </a>
         <a className="btn" href="#/import-export">
