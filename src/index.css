@@ -718,3 +718,29 @@ select {
   min-height: 44px;
   border-radius: 10px;
 }
+
+/* --- drag-to-reorder handle --- */
+.drag-handle {
+  border: none;
+  background: none;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  font-size: 1.15rem;
+  color: var(--muted);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.word-row.dragging {
+  box-shadow: var(--shadow);
+  border-color: var(--brand);
+  scale: 1.02;
+  position: relative;
+  z-index: 2;
+}

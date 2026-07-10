@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocale, useT } from "../i18n";
 import type { Category, Word } from "../domain/types";
 import { categoryRepo } from "./data";
@@ -35,6 +35,8 @@ export default function EditorPage({ id }: { id?: string }) {
   const [single, setSingle] = useState("");
   const [bulk, setBulk] = useState("");
   const [error, setError] = useState("");
+  const [draggingId, setDraggingId] = useState<string | null>(null);
+  const dragRef = useRef<{ id: string; lastY: number } | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -44,6 +46,44 @@ export default function EditorPage({ id }: { id?: string }) {
       else window.location.hash = "#/";
     });
   }, [id]);
+
+  // drag-to-reorder: live-swap with the neighbor whenever the pointer crosses
+  // a row boundary; window-level listeners for the drag's duration, and
+  // touch-action:none on the handle makes it work on phones. Must stay above
+  // the early return so the hook order is stable while the category loads.
+  useEffect(() => {
+    const drag = dragRef.current;
+    if (!draggingId || !drag) return;
+    const onMove = (e: PointerEvent) => {
+      const row = document.querySelector<HTMLLIElement>(".word-row.dragging");
+      const rowH = (row?.offsetHeight ?? 48) + 6; // + list gap
+      const dy = e.clientY - drag.lastY;
+      if (Math.abs(dy) < rowH * 0.6) return;
+      const dir: -1 | 1 = dy > 0 ? 1 : -1;
+      setCategory((c) => {
+        if (!c) return c;
+        const index = c.words.findIndex((w) => w.id === draggingId);
+        const j = index + dir;
+        if (index < 0 || j < 0 || j >= c.words.length) return c;
+        const words = [...c.words];
+        [words[index], words[j]] = [words[j]!, words[index]!];
+        drag.lastY += dir * rowH; // ponytail: dev StrictMode double-invoke may double this; prod unaffected
+        return { ...c, words };
+      });
+    };
+    const onUp = () => {
+      dragRef.current = null;
+      setDraggingId(null);
+    };
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onUp);
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onUp);
+    };
+  }, [draggingId]);
 
   if (!category) return null;
   const patch = (p: Partial<Category>) => setCategory({ ...category, ...p });
@@ -66,6 +106,15 @@ export default function EditorPage({ id }: { id?: string }) {
     if (j < 0 || j >= words.length) return;
     [words[index], words[j]] = [words[j]!, words[index]!];
     patch({ words });
+  };
+
+  const onHandleDown = (
+    e: React.PointerEvent<HTMLButtonElement>,
+    id: string,
+  ) => {
+    e.preventDefault();
+    dragRef.current = { id, lastY: e.clientY };
+    setDraggingId(id);
   };
 
   const dedupe = () => {
@@ -219,7 +268,22 @@ export default function EditorPage({ id }: { id?: string }) {
       {/* ponytail: plain list, fine into the hundreds; virtualize if 10k-word decks get edited */}
       <ul className="word-list">
         {category.words.map((w, i) => (
-          <li key={w.id} className="word-row">
+          <li
+            key={w.id}
+            className={`word-row${draggingId === w.id ? " dragging" : ""}`}
+          >
+            <button
+              className="drag-handle"
+              aria-label={t("dragToReorder")}
+              onPointerDown={(e) => onHandleDown(e, w.id)}
+              onKeyDown={(e) => {
+                if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
+                e.preventDefault();
+                moveWord(i, e.key === "ArrowUp" ? -1 : 1);
+              }}
+            >
+              ⠿
+            </button>
             <input
               type="checkbox"
               aria-label={t("wordEnabledLabel")}
@@ -232,22 +296,6 @@ export default function EditorPage({ id }: { id?: string }) {
               maxLength={200}
               onChange={(e) => patchWord(w.id, { text: e.target.value })}
             />
-            <button
-              className="btn-plain"
-              aria-label={t("moveUp")}
-              disabled={i === 0}
-              onClick={() => moveWord(i, -1)}
-            >
-              ▲
-            </button>
-            <button
-              className="btn-plain"
-              aria-label={t("moveDown")}
-              disabled={i === category.words.length - 1}
-              onClick={() => moveWord(i, 1)}
-            >
-              ▼
-            </button>
             <button
               className="btn-plain"
               aria-label={t("deleteWordLabel")}

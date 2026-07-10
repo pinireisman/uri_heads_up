@@ -226,9 +226,11 @@ test("ordered category plays words in the listed order", async ({ page }) => {
     .getByPlaceholder("Paste words — one per line")
     .fill(["First", "Second", "Third"].join("\n"));
   await page.getByRole("button", { name: "Add all" }).click();
-  // move "Third" to the top with two ▲ clicks
-  await page.getByRole("button", { name: "Move up" }).nth(2).click();
-  await page.getByRole("button", { name: "Move up" }).nth(1).click();
+  // move "Third" to the top: keyboard on its drag handle
+  const handles = page.getByRole("button", { name: "Drag to reorder" });
+  await handles.nth(2).focus();
+  await page.keyboard.press("ArrowUp");
+  await page.keyboard.press("ArrowUp");
   await page.getByLabel("Play words in listed order").check();
   await page.getByRole("button", { name: "Save" }).click();
 
@@ -247,4 +249,42 @@ test("emoji picker sets the category icon", async ({ page }) => {
   await page.getByText("Choose an emoji").click();
   await page.getByRole("button", { name: "🦁" }).click();
   await expect(page.getByLabel("Emoji")).toHaveValue("🦁");
+});
+
+test("words can be reordered by dragging the handle", async ({ page }) => {
+  await page.goto("#/new");
+  await page.getByLabel("Name").fill("Drag");
+  await page
+    .getByPlaceholder("Paste words — one per line")
+    .fill(["Aaa", "Bbb", "Ccc"].join("\n"));
+  await page.getByRole("button", { name: "Add all" }).click();
+
+  const handle = page.getByRole("button", { name: "Drag to reorder" }).first();
+  await handle.scrollIntoViewIfNeeded();
+  const from = (await handle.boundingBox())!;
+  const row = (await page.locator(".word-row").first().boundingBox())!;
+  await page.mouse.move(from.x + from.width / 2, from.y + from.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(
+    from.x + from.width / 2,
+    from.y + from.height / 2 + row.height * 1.4,
+    { steps: 12 },
+  );
+  await page.mouse.up();
+
+  const texts = page.locator('.word-row input[aria-label="Word text"]');
+  await expect(texts.nth(0)).toHaveValue("Bbb");
+  await expect(texts.nth(1)).toHaveValue("Aaa");
+});
+
+test("reordering works when editing an existing category", async ({ page }) => {
+  await page.goto("#/");
+  await page.getByRole("link", { name: /Animals/ }).click();
+  await page.getByRole("link", { name: "Edit category" }).click();
+  const texts = page.locator('.word-row input[aria-label="Word text"]');
+  const first = await texts.nth(0).inputValue();
+  const handle = page.getByRole("button", { name: "Drag to reorder" }).first();
+  await handle.focus();
+  await page.keyboard.press("ArrowDown");
+  await expect(texts.nth(1)).toHaveValue(first);
 });

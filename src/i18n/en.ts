@@ -29,8 +29,7 @@ export const en = {
 
   // editor
   playInOrder: "Play words in listed order",
-  moveUp: "Move up",
-  moveDown: "Move down",
+  dragToReorder: "Drag to reorder",
   emojiPick: "Choose an emoji",
   newCategoryTitle: "New category",
   editCategoryTitle: "Edit category",

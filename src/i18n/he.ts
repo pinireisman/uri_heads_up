@@ -31,8 +31,7 @@ export const he = {
 
   // editor
   playInOrder: "משחק לפי סדר הרשימה",
-  moveUp: "הזזה למעלה",
-  moveDown: "הזזה למטה",
+  dragToReorder: "גרירה לשינוי הסדר",
   emojiPick: "בחירת אימוג'י",
   newCategoryTitle: "קטגוריה חדשה",
   editCategoryTitle: "עריכת קטגוריה",
