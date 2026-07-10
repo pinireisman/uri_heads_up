@@ -100,6 +100,12 @@ export const he = {
   errInvalid: "הקובץ אינו ייצוא קטגוריות תקין: {detail}",
 
   // settings
+  setTheme: "מראה",
+  themeSystem: "לפי המערכת",
+  themeLight: "בהיר",
+  themeDark: "כהה",
+  setWordsPerRound: "מילים בסיבוב",
+  wordsAll: "כל המילים",
   settingsTitle: "הגדרות",
   setMotion: "שליטה בתנועה",
   setSensitivity: "רגישות מחוות",

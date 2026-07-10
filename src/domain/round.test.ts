@@ -89,3 +89,26 @@ describe("Round", () => {
     expect(summarize(result).skipped).toBe(2); // original untouched
   });
 });
+
+describe("words per round limit", () => {
+  test("limits the deck to N random words", () => {
+    const round = new Round(makeCategory(10), Math.random, 3);
+    let n = 0;
+    while (round.current) {
+      round.classify("correct");
+      n++;
+    }
+    expect(n).toBe(3);
+  });
+
+  test("0 or oversized limit plays the whole deck", () => {
+    expect(new Round(makeCategory(4), Math.random, 0).end).toBeDefined();
+    const all = new Round(makeCategory(4), Math.random, 99);
+    let n = 0;
+    while (all.current) {
+      all.classify("skipped");
+      n++;
+    }
+    expect(n).toBe(4);
+  });
+});

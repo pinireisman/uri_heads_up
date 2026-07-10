@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useT } from "../i18n";
 import type { MessageKey } from "../i18n/en";
-import type { Sensitivity, Settings } from "../domain/settings";
+import type { Sensitivity, Settings, Theme } from "../domain/settings";
 import { clearRounds } from "../persistence/repositories";
 import { dbReady } from "../startup";
 import { useSettings } from "./data";
@@ -33,6 +33,33 @@ export default function SettingsPage() {
       <h1>{t("settingsTitle")}</h1>
 
       <div className="settings-list">
+        <label className="check">
+          {t("setTheme")}
+          <select
+            value={settings.theme}
+            onChange={(e) => void update({ theme: e.target.value as Theme })}
+          >
+            <option value="system">{t("themeSystem")}</option>
+            <option value="light">{t("themeLight")}</option>
+            <option value="dark">{t("themeDark")}</option>
+          </select>
+        </label>
+        <label className="check">
+          {t("setWordsPerRound")}
+          <select
+            value={settings.wordsPerRound}
+            onChange={(e) =>
+              void update({ wordsPerRound: Number(e.target.value) })
+            }
+          >
+            <option value={0}>{t("wordsAll")}</option>
+            {[5, 10, 15, 20, 30].map((n) => (
+              <option key={n} value={n}>
+                {n}
+              </option>
+            ))}
+          </select>
+        </label>
         {toggles.map(([key, label]) => (
           <label key={key} className="check">
             <input

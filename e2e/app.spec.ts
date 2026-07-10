@@ -161,3 +161,35 @@ test("works offline after the first successful load (E2E-9)", async ({
   await page.getByRole("button", { name: "End round" }).click();
   await expect(page).toHaveURL(/#\/results/);
 });
+
+test("dark mode setting pins the color scheme and persists", async ({
+  page,
+}) => {
+  await page.goto("#/settings");
+  await page.getByLabel("Appearance").selectOption("dark");
+  await expect(page.locator("html")).toHaveCSS("color-scheme", "dark");
+  await page.reload();
+  await expect(page.locator("html")).toHaveCSS("color-scheme", "dark");
+});
+
+test("words-per-round setting limits the deck", async ({ page }) => {
+  await page.goto("#/settings");
+  await page.getByLabel("Words per round").selectOption("5");
+
+  await page.goto("#/new");
+  await page.getByLabel("Name").fill("Limited");
+  await page
+    .getByPlaceholder("Paste words — one per line")
+    .fill(["A", "B", "C", "D", "E", "F", "G", "H"].join("\n"));
+  await page.getByRole("button", { name: "Add all" }).click();
+  await page.getByRole("button", { name: "Save" }).click();
+  await page.getByRole("link", { name: "Start round" }).click();
+  await expect(page.locator(".play-word")).toBeVisible({ timeout: 10_000 });
+
+  for (let i = 0; i < 5; i++) {
+    await page.getByRole("button", { name: "Correct" }).click();
+    await expect(page.locator(".flash-correct")).toBeHidden();
+  }
+  await expect(page).toHaveURL(/#\/results/, { timeout: 10_000 });
+  await expect(page.getByText("5 words shown")).toBeVisible();
+});

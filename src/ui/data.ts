@@ -7,6 +7,7 @@ import {
   setSetting,
 } from "../persistence/repositories";
 import { dbReady } from "../startup";
+import { applyTheme } from "./theme";
 
 export async function categoryRepo(): Promise<IdbCategoryRepository> {
   return new IdbCategoryRepository(await dbReady);
@@ -39,18 +40,21 @@ const SETTINGS_KEY = "settings";
 
 export function useSettings() {
   const [settings, setSettings] = useState<Settings>(defaultSettings);
+  const [ready, setReady] = useState(false);
   useEffect(() => {
     void dbReady.then(async (db) => {
       const stored = await getSetting<Partial<Settings>>(db, SETTINGS_KEY);
       if (stored) setSettings({ ...defaultSettings, ...stored });
+      setReady(true);
     });
   }, []);
   const update = useCallback(async (patch: Partial<Settings>) => {
     let next: Settings | undefined;
     setSettings((prev) => (next = { ...prev, ...patch }));
+    if (patch.theme) applyTheme(patch.theme);
     await setSetting(await dbReady, SETTINGS_KEY, next);
   }, []);
-  return { settings, update };
+  return { settings, update, ready };
 }
 
 // Last finished round, held for the results screen (with its history key so

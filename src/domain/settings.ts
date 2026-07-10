@@ -1,6 +1,10 @@
 export type Sensitivity = "low" | "normal" | "high";
+export type Theme = "system" | "light" | "dark";
 
 export interface Settings {
+  theme: Theme;
+  /** 0 = play the whole deck */
+  wordsPerRound: number;
   motionEnabled: boolean;
   sensitivity: Sensitivity;
   invertDirections: boolean;
@@ -12,6 +16,8 @@ export interface Settings {
 }
 
 export const defaultSettings: Settings = {
+  theme: "system",
+  wordsPerRound: 0,
   motionEnabled: true,
   sensitivity: "normal",
   invertDirections: false,

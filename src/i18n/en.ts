@@ -99,6 +99,12 @@ export const en = {
   errInvalid: "The file is not a valid category export: {detail}",
 
   // settings
+  setTheme: "Appearance",
+  themeSystem: "System",
+  themeLight: "Light",
+  themeDark: "Dark",
+  setWordsPerRound: "Words per round",
+  wordsAll: "All words",
   settingsTitle: "Settings",
   setMotion: "Motion control",
   setSensitivity: "Gesture sensitivity",

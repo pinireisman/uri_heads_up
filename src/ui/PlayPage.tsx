@@ -30,7 +30,7 @@ type Phase = "play" | "feedback" | "complete";
 
 export default function PlayPage({ id }: { id: string }) {
   const t = useT();
-  const { settings } = useSettings();
+  const { settings, ready: settingsReady } = useSettings();
   const [round, setRound] = useState<Round | null>(null);
   const [stage, setStage] = useState<Stage>("init");
   const [phase, setPhase] = useState<Phase>("play");
@@ -46,17 +46,21 @@ export default function PlayPage({ id }: { id: string }) {
     settings.keepAwake && (stage === "live" || stage === "calibrating"),
   );
 
+  // wait for stored settings so wordsPerRound/motion apply to this round
   useEffect(() => {
+    if (!settingsReady || round) return;
     void categoryRepo().then(async (repo) => {
       const category = await repo.get(id);
       if (!category || enabledWords(category).length === 0) {
         window.location.hash = "#/";
         return;
       }
-      setRound(new Round(category));
+      setRound(new Round(category, Math.random, settings.wordsPerRound));
     });
-    return () => controller.current?.stop();
-  }, [id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, settingsReady, round]);
+
+  useEffect(() => () => controller.current?.stop(), []);
 
   const startMotion = () => {
     controller.current?.stop();

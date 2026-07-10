@@ -19,10 +19,15 @@ export class Round {
   private deck: Word[];
   private outcomes: RoundOutcome[] = [];
 
-  constructor(category: Category, random: () => number = Math.random) {
+  constructor(
+    category: Category,
+    random: () => number = Math.random,
+    limit = 0, // 0 = whole deck
+  ) {
     this.categoryId = category.id;
     this.categoryName = category.name;
-    this.deck = shuffle(enabledWords(category), random);
+    const deck = shuffle(enabledWords(category), random);
+    this.deck = limit > 0 ? deck.slice(0, limit) : deck;
   }
 
   /** null once the deck is exhausted ("Deck complete"). */
