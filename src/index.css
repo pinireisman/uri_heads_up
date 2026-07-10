@@ -34,3 +34,94 @@ button {
   min-height: 44px;
   min-width: 44px;
 }
+
+/* --- diagnostics page --- */
+.diag {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 1rem;
+  direction: ltr; /* dev tool, English-only */
+}
+
+.diag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  font-family: ui-monospace, monospace;
+  font-size: 0.85rem;
+}
+
+.diag-numbers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
+  gap: 0.75rem;
+  margin: 1rem 0;
+  font-family: ui-monospace, monospace;
+}
+
+.diag-numbers label {
+  display: block;
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+.diag-numbers strong {
+  font-size: 1.4rem;
+}
+
+.diag-numbers .big {
+  font-size: 2.2rem;
+}
+
+.diag-tuning {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.diag-tuning label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.8rem;
+}
+
+.diag-tuning input {
+  font: inherit;
+  padding: 0.4rem;
+  min-height: 44px;
+}
+
+.diag-log {
+  font-family: ui-monospace, monospace;
+  font-size: 0.8rem;
+  max-height: 14rem;
+  overflow-y: auto;
+  padding-inline-start: 1.5rem;
+}
+
+.flash {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  font-weight: 700;
+  color: #fff;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.flash-correct {
+  background: rgba(22, 132, 60, 0.9);
+}
+
+.flash-skip {
+  background: rgba(196, 121, 9, 0.9);
+}
+
+.flash-cal {
+  background: rgba(40, 70, 160, 0.85);
+  font-size: 5rem;
+}
