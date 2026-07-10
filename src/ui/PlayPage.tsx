@@ -5,6 +5,7 @@ import { enabledWords } from "../domain/types";
 import { addRound } from "../persistence/repositories";
 import { dbReady } from "../startup";
 import { categoryRepo, setLastRound, useSettings } from "./data";
+import { playFeedback } from "./sounds";
 import {
   MotionController,
   type MotionState,
@@ -131,6 +132,7 @@ export default function PlayPage({ id }: { id: string }) {
       round.classify(result);
       setFeedback(result);
       setPhase("feedback");
+      if (settings.soundEnabled) playFeedback(result);
       // PRD §8.3: hold feedback ~400ms so other players perceive it
       setTimeout(() => {
         setFeedback(null);
@@ -142,7 +144,7 @@ export default function PlayPage({ id }: { id: string }) {
         }
       }, 400);
     },
-    [round, stage, phase, finish],
+    [round, stage, phase, finish, settings.soundEnabled],
   );
 
   // gestures route through the same classify path as buttons (FR-7);
