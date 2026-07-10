@@ -63,6 +63,29 @@ export default function PlayPage({ id }: { id: string }) {
 
   useEffect(() => () => controller.current?.stop(), []);
 
+  // lock landscape for the round only (installed PWA / fullscreen); editor
+  // screens stay rotatable. Best-effort per FR-13 — rejection is fine.
+  useEffect(() => {
+    try {
+      void (
+        screen.orientation as ScreenOrientation & {
+          lock?: (o: string) => Promise<void>;
+        }
+      )
+        .lock?.("landscape")
+        .catch(() => {});
+    } catch {
+      /* unsupported */
+    }
+    return () => {
+      try {
+        screen.orientation.unlock();
+      } catch {
+        /* unsupported */
+      }
+    };
+  }, []);
+
   const startMotion = () => {
     controller.current?.stop();
     const c = new MotionController(gestureConfigFor(settings.sensitivity), {

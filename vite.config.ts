@@ -16,7 +16,8 @@ export default defineConfig({
         short_name: "UriHeadsUp",
         description: "Forehead word-guessing party game",
         display: "standalone",
-        orientation: "landscape", // FR-13: preference only, portrait still handled
+        // no manifest orientation lock: editing screens need portrait;
+        // gameplay locks itself to landscape at round start (best-effort)
         theme_color: "#4f7cac",
         background_color: "#2c4f75",
         icons: [
