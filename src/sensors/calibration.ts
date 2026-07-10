@@ -1,4 +1,5 @@
 export const CALIBRATION = {
+  prepareMs: 3000, // raise-the-phone grace before sampling starts
   windowMs: 3000,
   minSamples: 30, // ~1s of events at typical rates; fewer means sensors are not delivering
   maxSpreadDeg: 12,

@@ -57,9 +57,11 @@ export default function ResultsPage() {
       <h1>{t("resultsTitle")}</h1>
       <p>
         {result.categoryName} — {t("presentedTotal", { n: counts.presented })}
-        {settings.showRoundTimer && result.durationMs != null && (
-          <> — {t("resultsTime", { t: formatDuration(result.durationMs) })}</>
-        )}
+        {settings.showRoundTimer &&
+          !result.completed &&
+          result.durationMs != null && (
+            <> — {t("resultsTime", { t: formatDuration(result.durationMs) })}</>
+          )}
       </p>
       <div className="score-row">
         <div className="score score-correct">
@@ -69,6 +71,15 @@ export default function ResultsPage() {
           <strong>{counts.skipped}</strong> ↷ {t("skippedList")}
         </div>
       </div>
+
+      {settings.showRoundTimer &&
+        result.completed &&
+        result.durationMs != null && (
+          <div className="time-card">
+            <strong>⏱ {formatDuration(result.durationMs)}</strong>
+            <span>{t("timeToComplete")}</span>
+          </div>
+        )}
 
       {(["correct", "skipped", "unclassified"] as const).map((status) => {
         const items = group(status);

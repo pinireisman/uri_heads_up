@@ -11,6 +11,8 @@ export interface Category {
   icon: string; // emoji or empty
   color: string; // #rrggbb or empty (UI default)
   enabled: boolean;
+  /** play words in list order instead of shuffling */
+  ordered?: boolean;
   words: Word[];
 }
 
@@ -29,6 +31,8 @@ export interface RoundResult {
   endedAt: string;
   /** first word shown → round end; absent on rounds saved before the timer existed */
   durationMs?: number;
+  /** true when the deck was exhausted (vs ended manually) */
+  completed?: boolean;
   outcomes: RoundOutcome[];
 }
 

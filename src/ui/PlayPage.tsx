@@ -37,6 +37,7 @@ export default function PlayPage({ id }: { id: string }) {
   const [count, setCount] = useState(3);
   const [feedback, setFeedback] = useState<"correct" | "skipped" | null>(null);
   const [motionActive, setMotionActive] = useState(false);
+  const [sampling, setSampling] = useState(false);
   const [notice, setNotice] = useState(false);
   const controller = useRef<MotionController | null>(null);
   const endedRef = useRef(false);
@@ -91,9 +92,14 @@ export default function PlayPage({ id }: { id: string }) {
     const c = new MotionController(gestureConfigFor(settings.sensitivity), {
       onState: (s: MotionState) => {
         switch (s) {
+          case "preparing":
+            setCount(3);
+            setSampling(false);
+            setStage("calibrating");
+            break;
           case "calibrating":
             setCount(3);
-            setStage("calibrating");
+            setSampling(true);
             break;
           case "active":
             setMotionActive(true);
@@ -269,7 +275,11 @@ export default function PlayPage({ id }: { id: string }) {
         <div className="rotate-note">{t("rotatePrompt")}</div>
         <div className="play-countdown" role="status">
           <div className="count-number">{count > 0 ? count : ""}</div>
-          <p>{stage === "calibrating" ? t("holdStill") : t("getReady")}</p>
+          <p>
+            {stage === "calibrating"
+              ? t(sampling ? "stayStill" : "holdStill")
+              : t("getReady")}
+          </p>
         </div>
       </main>
     );

@@ -40,9 +40,9 @@ async function createAndStart(page: Page, words: string[]) {
   await expect(page.getByText("Hold the phone to your forehead")).toBeVisible();
 }
 
-/** Feed a stable neutral stream through calibration until the word appears. */
+/** Feed a stable neutral stream through prepare + calibration until the word appears. */
 async function calibrate(page: Page) {
-  await inject(page, NEUTRAL, 3400);
+  await inject(page, NEUTRAL, 6800);
   await expect(page.locator(".play-word")).toBeVisible({ timeout: 5000 });
 }
 
@@ -89,8 +89,8 @@ test("unstable calibration offers retry and touch fallback", async ({
   page,
 }) => {
   await createAndStart(page, ["A", "B"]);
-  // wobble hard during the calibration window
-  for (let i = 0; i < 12; i++) {
+  // wobble hard through prepare + the sampling window
+  for (let i = 0; i < 50; i++) {
     await inject(page, i % 2 ? DOWN : UP, 130);
   }
   await expect(

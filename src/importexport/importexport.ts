@@ -34,6 +34,7 @@ const categorySchema = z.object({
     .or(z.literal("")) // exports of categories without a color round-trip
     .optional(),
   enabled: z.boolean().optional(),
+  ordered: z.boolean().optional(),
   words: z.array(wordSchema).max(LIMITS.wordsPerCategory),
 });
 
@@ -151,6 +152,7 @@ export function parseImport(text: string, existing: Category[]): ParseResult {
       icon: raw.icon ?? "",
       color: raw.color ?? "",
       enabled: raw.enabled ?? true,
+      ordered: raw.ordered ?? false,
       words,
     };
   });

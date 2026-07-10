@@ -214,5 +214,37 @@ test("round timer option shows elapsed time on results", async ({ page }) => {
   await startRound(page);
   await page.getByRole("button", { name: "Correct" }).click();
   await expect(page).toHaveURL(/#\/results/, { timeout: 10_000 });
-  await expect(page.getByText(/Time: \d+:\d\d/)).toBeVisible();
+  // deck completed → prominent time card
+  await expect(page.getByText("Deck finished in")).toBeVisible();
+  await expect(page.locator(".time-card strong")).toHaveText(/\d+:\d\d/);
+});
+
+test("ordered category plays words in the listed order", async ({ page }) => {
+  await page.goto("#/new");
+  await page.getByLabel("Name").fill("Ordered");
+  await page
+    .getByPlaceholder("Paste words — one per line")
+    .fill(["First", "Second", "Third"].join("\n"));
+  await page.getByRole("button", { name: "Add all" }).click();
+  // move "Third" to the top with two ▲ clicks
+  await page.getByRole("button", { name: "Move up" }).nth(2).click();
+  await page.getByRole("button", { name: "Move up" }).nth(1).click();
+  await page.getByLabel("Play words in listed order").check();
+  await page.getByRole("button", { name: "Save" }).click();
+
+  await page.getByRole("link", { name: "Start round" }).click();
+  await expect(page.locator(".play-word")).toBeVisible({ timeout: 12_000 });
+  await expect(page.locator(".play-word")).toHaveText("Third");
+  await page.keyboard.press("ArrowDown");
+  await expect(page.locator(".play-word")).toHaveText("First", {
+    timeout: 5000,
+  });
+});
+
+test("emoji picker sets the category icon", async ({ page }) => {
+  await page.goto("#/new");
+  await page.getByLabel("Name").fill("Emoji");
+  await page.getByText("Choose an emoji").click();
+  await page.getByRole("button", { name: "🦁" }).click();
+  await expect(page.getByLabel("Emoji")).toHaveValue("🦁");
 });

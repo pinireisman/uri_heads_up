@@ -112,3 +112,26 @@ describe("words per round limit", () => {
     expect(n).toBe(4);
   });
 });
+
+describe("ordered play and completion flag", () => {
+  test("ordered category plays words in list order", () => {
+    const category = { ...makeCategory(4), ordered: true };
+    const round = new Round(category);
+    const seen: string[] = [];
+    while (round.current) {
+      seen.push(round.current.id);
+      round.classify("correct");
+    }
+    expect(seen).toEqual(["w0", "w1", "w2", "w3"]);
+  });
+
+  test("completed is true on exhaustion, false on early end", () => {
+    const done = new Round(makeCategory(1));
+    done.classify("correct");
+    expect(done.end().completed).toBe(true);
+
+    const early = new Round(makeCategory(3));
+    early.classify("correct");
+    expect(early.end().completed).toBe(false);
+  });
+});

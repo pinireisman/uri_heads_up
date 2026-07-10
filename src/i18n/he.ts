@@ -30,6 +30,10 @@ export const he = {
   cannotStartEmpty: "הוסיפו מילים לפני שמתחילים סיבוב.",
 
   // editor
+  playInOrder: "משחק לפי סדר הרשימה",
+  moveUp: "הזזה למעלה",
+  moveDown: "הזזה למטה",
+  emojiPick: "בחירת אימוג'י",
   newCategoryTitle: "קטגוריה חדשה",
   editCategoryTitle: "עריכת קטגוריה",
   nameLabel: "שם",
@@ -53,6 +57,7 @@ export const he = {
   nameRequired: "נא לתת שם לקטגוריה.",
 
   // play
+  stayStill: "להישאר בלי לזוז…",
   getReady: "מתכוננים…",
   correct: "נכון",
   skip: "דילוג",
@@ -63,6 +68,7 @@ export const he = {
   rotatePrompt: "סובבו את הטלפון לרוחב",
 
   // results
+  timeToComplete: "החבילה הושלמה תוך",
   resultsTime: "זמן: {t}",
   resultsTitle: "סיכום הסיבוב",
   correctList: "נוחשו",

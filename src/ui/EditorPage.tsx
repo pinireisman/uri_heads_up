@@ -15,6 +15,11 @@ function blankCategory(): Category {
   };
 }
 
+const EMOJIS =
+  "🐘 🦒 🐶 🐱 🦁 🐼 🦉 🐬 🎬 🎵 🎤 🎮 ⚽ 🏀 🍕 🍦 🎂 🌍 ✈️ 🚗 🏰 📚 🔬 🎨 🦸 🧙 👨‍👩‍👧‍👦 😀 🎉 ⭐ 🔥 🌈".split(
+    " ",
+  );
+
 const toWord = (text: string): Word => ({
   id: crypto.randomUUID(),
   text,
@@ -53,6 +58,14 @@ export default function EditorPage({ id }: { id?: string }) {
       .filter(Boolean)
       .map(toWord);
     if (words.length) patch({ words: [...category.words, ...words] });
+  };
+
+  const moveWord = (index: number, dir: -1 | 1) => {
+    const words = [...category.words];
+    const j = index + dir;
+    if (j < 0 || j >= words.length) return;
+    [words[index], words[j]] = [words[j]!, words[index]!];
+    patch({ words });
   };
 
   const dedupe = () => {
@@ -114,7 +127,7 @@ export default function EditorPage({ id }: { id?: string }) {
             className="input-icon"
             value={category.icon}
             onChange={(e) => patch({ icon: e.target.value })}
-            maxLength={4}
+            maxLength={16}
           />
         </label>
         <label>
@@ -126,6 +139,26 @@ export default function EditorPage({ id }: { id?: string }) {
           />
         </label>
       </div>
+
+      <details>
+        <summary>{t("emojiPick")}</summary>
+        <div className="emoji-grid">
+          {EMOJIS.map((e) => (
+            <button key={e} onClick={() => patch({ icon: e })} aria-label={e}>
+              {e}
+            </button>
+          ))}
+        </div>
+      </details>
+
+      <label className="check">
+        <input
+          type="checkbox"
+          checked={category.ordered ?? false}
+          onChange={(e) => patch({ ordered: e.target.checked })}
+        />
+        {t("playInOrder")}
+      </label>
 
       <h2>
         {t("wordsLabel")} ({category.words.length})
@@ -185,7 +218,7 @@ export default function EditorPage({ id }: { id?: string }) {
 
       {/* ponytail: plain list, fine into the hundreds; virtualize if 10k-word decks get edited */}
       <ul className="word-list">
-        {category.words.map((w) => (
+        {category.words.map((w, i) => (
           <li key={w.id} className="word-row">
             <input
               type="checkbox"
@@ -199,6 +232,22 @@ export default function EditorPage({ id }: { id?: string }) {
               maxLength={200}
               onChange={(e) => patchWord(w.id, { text: e.target.value })}
             />
+            <button
+              className="btn-plain"
+              aria-label={t("moveUp")}
+              disabled={i === 0}
+              onClick={() => moveWord(i, -1)}
+            >
+              ▲
+            </button>
+            <button
+              className="btn-plain"
+              aria-label={t("moveDown")}
+              disabled={i === category.words.length - 1}
+              onClick={() => moveWord(i, 1)}
+            >
+              ▼
+            </button>
             <button
               className="btn-plain"
               aria-label={t("deleteWordLabel")}

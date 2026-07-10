@@ -28,6 +28,10 @@ export const en = {
   cannotStartEmpty: "Add words before starting a round.",
 
   // editor
+  playInOrder: "Play words in listed order",
+  moveUp: "Move up",
+  moveDown: "Move down",
+  emojiPick: "Choose an emoji",
   newCategoryTitle: "New category",
   editCategoryTitle: "Edit category",
   nameLabel: "Name",
@@ -51,6 +55,7 @@ export const en = {
   nameRequired: "Please give the category a name.",
 
   // play
+  stayStill: "Stay still…",
   getReady: "Get ready…",
   correct: "Correct",
   skip: "Skip",
@@ -61,6 +66,7 @@ export const en = {
   rotatePrompt: "Rotate your phone sideways",
 
   // results
+  timeToComplete: "Deck finished in",
   resultsTime: "Time: {t}",
   resultsTitle: "Round summary",
   correctList: "Guessed",

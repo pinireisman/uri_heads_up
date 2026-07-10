@@ -26,7 +26,8 @@ export class Round {
   ) {
     this.categoryId = category.id;
     this.categoryName = category.name;
-    const deck = shuffle(enabledWords(category), random);
+    const pool = enabledWords(category);
+    const deck = category.ordered ? pool : shuffle(pool, random);
     this.deck = limit > 0 ? deck.slice(0, limit) : deck;
   }
 
@@ -52,6 +53,7 @@ export class Round {
 
   /** End now; a word still on screen is recorded as unclassified. */
   end(): RoundResult {
+    const completed = this.current === null;
     const outcomes = [...this.outcomes];
     const word = this.current;
     if (word) {
@@ -66,6 +68,7 @@ export class Round {
       categoryName: this.categoryName,
       startedAt: this.startedAt,
       endedAt: new Date().toISOString(),
+      completed,
       outcomes,
     };
   }

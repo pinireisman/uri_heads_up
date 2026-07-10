@@ -8,6 +8,7 @@ import {
 import { requestMotionPermission } from "./permission";
 
 export type MotionState =
+  | "preparing"
   | "unsupported"
   | "denied"
   | "no-data"
@@ -65,26 +66,31 @@ export class MotionController {
     this.calibrate();
   }
 
-  /** Collect samples for the countdown window, then derive the neutral baseline. */
+  /** A short prepare phase gives the player time to raise the phone to the
+   * forehead, then samples are collected for the countdown window. */
   calibrate(): void {
     if (this.stopped) return;
-    this.samples = [];
     this.baseline = null;
-    this.setState("calibrating");
+    this.setState("preparing");
     clearTimeout(this.calTimer);
     this.calTimer = setTimeout(() => {
-      const result = computeBaseline(this.samples);
-      if (result.ok) {
-        this.baseline = result.baselineDeg;
-        this.ema.reset();
-        this.classifier = new GestureClassifier(this.config);
-        this.setState("active");
-      } else {
-        this.setState(
-          result.reason === "no-data" ? "no-data" : "calibration-unstable",
-        );
-      }
-    }, CALIBRATION.windowMs);
+      if (this.stopped) return;
+      this.samples = [];
+      this.setState("calibrating");
+      this.calTimer = setTimeout(() => {
+        const result = computeBaseline(this.samples);
+        if (result.ok) {
+          this.baseline = result.baselineDeg;
+          this.ema.reset();
+          this.classifier = new GestureClassifier(this.config);
+          this.setState("active");
+        } else {
+          this.setState(
+            result.reason === "no-data" ? "no-data" : "calibration-unstable",
+          );
+        }
+      }, CALIBRATION.windowMs);
+    }, CALIBRATION.prepareMs);
   }
 
   stop(): void {
