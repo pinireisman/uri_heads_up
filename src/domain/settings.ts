@@ -22,10 +22,10 @@ export const defaultSettings: Settings = {
   motionEnabled: true,
   sensitivity: "normal",
   invertDirections: false,
-  soundEnabled: false, // PRD Q12 default: sounds off
+  soundEnabled: true, // owner preference (overrides PRD Q12 default)
   showTouchDuringMotion: true,
   keepAwake: true,
   confirmEndRound: true,
   showPresentedCount: true,
-  showRoundTimer: false,
+  showRoundTimer: true,
 };
