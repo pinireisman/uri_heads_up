@@ -1,6 +1,7 @@
 import { useLocale, useT } from "../i18n";
 import { enabledWords } from "../domain/types";
 import { useInstallPrompt } from "../pwa/install";
+import { useFullscreen } from "../pwa/fullscreen";
 import { useCategories } from "./data";
 
 export default function HomePage() {
@@ -8,17 +9,34 @@ export default function HomePage() {
   const { locale, setLocale } = useLocale();
   const { categories } = useCategories();
   const { canInstall, showIosHint, install } = useInstallPrompt();
+  const fullscreen = useFullscreen();
 
   return (
     <main className="page">
       <header className="home-header">
         <h1>{t("appName")}</h1>
-        <button
-          className="btn-plain"
-          onClick={() => setLocale(locale === "en" ? "he" : "en")}
-        >
-          {t("switchLanguage")}
-        </button>
+        <span>
+          {fullscreen.supported && (
+            <button
+              className="btn-plain"
+              aria-label={t(
+                fullscreen.active ? "fullscreenExit" : "fullscreenEnter",
+              )}
+              title={t(
+                fullscreen.active ? "fullscreenExit" : "fullscreenEnter",
+              )}
+              onClick={fullscreen.toggle}
+            >
+              {fullscreen.active ? "🗗" : "⛶"}
+            </button>
+          )}
+          <button
+            className="btn-plain"
+            onClick={() => setLocale(locale === "en" ? "he" : "en")}
+          >
+            {t("switchLanguage")}
+          </button>
+        </span>
       </header>
       <p>{t("howToPlay")}</p>
 

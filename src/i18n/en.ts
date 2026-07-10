@@ -5,6 +5,8 @@ export const en = {
   diagLink: "Sensor diagnostics",
 
   // home
+  fullscreenEnter: "Full screen",
+  fullscreenExit: "Exit full screen",
   installApp: "Install app",
   iosInstallHint:
     "On iPhone: open in Safari, tap Share, then \u201cAdd to Home Screen\u201d.",

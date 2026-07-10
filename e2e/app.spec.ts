@@ -193,3 +193,15 @@ test("words-per-round setting limits the deck", async ({ page }) => {
   await expect(page).toHaveURL(/#\/results/, { timeout: 10_000 });
   await expect(page.getByText("5 words shown")).toBeVisible();
 });
+
+test("fullscreen button toggles fullscreen", async ({ page }) => {
+  await page.goto("#/");
+  await page.getByRole("button", { name: "Full screen" }).click();
+  await expect
+    .poll(() => page.evaluate(() => !!document.fullscreenElement))
+    .toBe(true);
+  await page.getByRole("button", { name: "Exit full screen" }).click();
+  await expect
+    .poll(() => page.evaluate(() => !!document.fullscreenElement))
+    .toBe(false);
+});

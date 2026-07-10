@@ -7,6 +7,8 @@ export const he = {
   diagLink: "אבחון חיישנים",
 
   // home
+  fullscreenEnter: "מסך מלא",
+  fullscreenExit: "יציאה ממסך מלא",
   installApp: "התקנת האפליקציה",
   iosInstallHint:
     "באייפון: פותחים בספארי, לוחצים על שיתוף ואז \u201cהוספה למסך הבית\u201d.",
