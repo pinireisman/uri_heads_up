@@ -63,9 +63,6 @@ export default function HomePage() {
           {t("settings")}
         </a>
       </nav>
-      <p className="footnote">
-        <a href="#/diag">{t("diagLink")}</a>
-      </p>
     </main>
   );
 }

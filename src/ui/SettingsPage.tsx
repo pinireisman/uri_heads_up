@@ -64,6 +64,9 @@ export default function SettingsPage() {
         </button>
       </p>
       {message && <p role="status">{message}</p>}
+      <p className="footnote">
+        <a href="#/diag">{t("diagLink")}</a>
+      </p>
     </main>
   );
 }

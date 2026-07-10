@@ -111,6 +111,17 @@ export const en = {
   clearHistory: "Clear round history",
   confirmClearHistory: "Delete all saved round history?",
   historyCleared: "Round history cleared.",
+  // motion onboarding
+  motionExplain:
+    "Motion control uses the phone's tilt sensor to record Correct and Skip. Your browser will ask for permission.",
+  enableMotion: "Enable motion control",
+  useTouch: "Use touch buttons",
+  holdStill: "Hold the phone to your forehead and stay still…",
+  calibrationFailed: "Calibration failed — the phone wasn't steady enough.",
+  retryCalibration: "Retry calibration",
+  motionDenied:
+    "Motion access was not granted. You can play with the Correct and Skip buttons, or allow motion access in your browser settings and reload.",
+  sensorNotice: "Motion unavailable — touch buttons active",
 };
 
 export type MessageKey = keyof typeof en;

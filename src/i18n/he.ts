@@ -112,4 +112,15 @@ export const he = {
   clearHistory: "מחיקת היסטוריית סיבובים",
   confirmClearHistory: "למחוק את כל היסטוריית הסיבובים?",
   historyCleared: "היסטוריית הסיבובים נמחקה.",
+  // motion onboarding
+  motionExplain:
+    "שליטה בתנועה משתמשת בחיישן ההטיה של הטלפון לסימון נכון ודילוג. הדפדפן יבקש הרשאה.",
+  enableMotion: "הפעלת שליטה בתנועה",
+  useTouch: "שימוש בכפתורי מגע",
+  holdStill: "הצמידו את הטלפון למצח והישארו בלי לזוז…",
+  calibrationFailed: "הכיול נכשל — הטלפון לא היה יציב מספיק.",
+  retryCalibration: "ניסיון כיול נוסף",
+  motionDenied:
+    "לא ניתנה הרשאה לחיישן התנועה. אפשר לשחק עם כפתורי נכון ודילוג, או לאפשר גישה בהגדרות הדפדפן ולטעון מחדש.",
+  sensorNotice: "חיישן תנועה לא זמין — כפתורי המגע פעילים",
 } satisfies Record<MessageKey, string>;

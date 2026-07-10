@@ -117,3 +117,17 @@ export class GestureClassifier {
     return transition;
   }
 }
+
+/** Sensitivity presets (PRD FR-14). Fine-grained tuning stays on the diag page. */
+export function gestureConfigFor(
+  sensitivity: "low" | "normal" | "high",
+): GestureConfig {
+  switch (sensitivity) {
+    case "low":
+      return { ...defaultGestureConfig, triggerDeg: 45, dwellMs: 200 };
+    case "high":
+      return { ...defaultGestureConfig, triggerDeg: 27, dwellMs: 120 };
+    default:
+      return defaultGestureConfig;
+  }
+}

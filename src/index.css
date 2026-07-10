@@ -448,3 +448,16 @@ select {
   background: rgba(40, 70, 160, 0.85);
   font-size: 5rem;
 }
+
+.setup-text {
+  font-size: 1.15rem;
+  max-width: 30rem;
+}
+
+.play-meta {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
