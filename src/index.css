@@ -326,7 +326,7 @@ select {
 }
 
 .flash-complete {
-  background: rgba(40, 70, 160, 0.9);
+  background: rgb(40, 70, 160);
 }
 
 /* --- results --- */
@@ -437,15 +437,15 @@ select {
 }
 
 .flash-correct {
-  background: rgba(22, 132, 60, 0.9);
+  background: rgb(22, 132, 60);
 }
 
 .flash-skip {
-  background: rgba(196, 121, 9, 0.9);
+  background: rgb(196, 121, 9);
 }
 
 .flash-cal {
-  background: rgba(40, 70, 160, 0.85);
+  background: rgb(40, 70, 160);
   font-size: 5rem;
 }
 
