@@ -1,6 +1,13 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import { useT } from "../i18n";
 import { Round } from "../domain/round";
+import { wordSizeScale } from "../domain/settings";
 import { enabledWords } from "../domain/types";
 import { addRound } from "../persistence/repositories";
 import { dbReady } from "../startup";
@@ -289,7 +296,14 @@ export default function PlayPage({ id }: { id: string }) {
   return (
     <main className="play">
       <div className="rotate-note">{t("rotatePrompt")}</div>
-      <h1 className="play-word">{round.current?.text}</h1>
+      <h1
+        className="play-word"
+        style={
+          { "--word-scale": wordSizeScale[settings.wordSize] } as CSSProperties
+        }
+      >
+        {round.current?.text}
+      </h1>
       <div className="play-meta">
         {settings.showPresentedCount &&
           t("presentedCount", { n: round.presented })}

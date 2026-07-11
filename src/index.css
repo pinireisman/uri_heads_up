@@ -436,7 +436,11 @@ select {
 
 .play-word {
   font-family: var(--display);
-  font-size: clamp(2.5rem, 14vmin, 8rem);
+  font-size: clamp(
+    calc(2.5rem * var(--word-scale, 1)),
+    calc(14vmin * var(--word-scale, 1)),
+    calc(8rem * var(--word-scale, 1))
+  );
   font-weight: 800;
   line-height: 1.08;
   margin: 0;

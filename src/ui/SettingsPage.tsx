@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { useT } from "../i18n";
 import type { MessageKey } from "../i18n/en";
-import type { Sensitivity, Settings, Theme } from "../domain/settings";
+import type {
+  Sensitivity,
+  Settings,
+  Theme,
+  WordSize,
+} from "../domain/settings";
 import { clearRounds } from "../persistence/repositories";
 import { dbReady } from "../startup";
 import { useSettings } from "./data";
@@ -59,6 +64,19 @@ export default function SettingsPage() {
                 {n}
               </option>
             ))}
+          </select>
+        </label>
+        <label className="check">
+          {t("setWordSize")}
+          <select
+            value={settings.wordSize}
+            onChange={(e) =>
+              void update({ wordSize: e.target.value as WordSize })
+            }
+          >
+            <option value="normal">{t("wordSizeNormal")}</option>
+            <option value="large">{t("wordSizeLarge")}</option>
+            <option value="huge">{t("wordSizeHuge")}</option>
           </select>
         </label>
         {toggles.map(([key, label]) => (

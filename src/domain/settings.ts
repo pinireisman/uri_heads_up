@@ -1,4 +1,10 @@
 export type Sensitivity = "low" | "normal" | "high";
+export type WordSize = "normal" | "large" | "huge";
+export const wordSizeScale: Record<WordSize, number> = {
+  normal: 1,
+  large: 1.3,
+  huge: 1.6,
+};
 export type Theme = "system" | "light" | "dark";
 
 export interface Settings {
@@ -14,6 +20,7 @@ export interface Settings {
   confirmEndRound: boolean;
   showPresentedCount: boolean;
   showRoundTimer: boolean;
+  wordSize: WordSize;
 }
 
 export const defaultSettings: Settings = {
@@ -28,4 +35,5 @@ export const defaultSettings: Settings = {
   confirmEndRound: true,
   showPresentedCount: true,
   showRoundTimer: true,
+  wordSize: "large", // guessers watch from across the room
 };
